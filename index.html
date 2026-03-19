@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B2B & B2C Pricing Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- เพิ่ม html2canvas เพื่อใช้ในการบันทึกรูปภาพ -->
+    <!-- โหลด html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -42,7 +42,7 @@
             </div>
             
             <!-- ปุ่มบันทึกรูปภาพ -->
-            <button onclick="exportImage()" class="no-export bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg font-medium transition flex items-center shadow-lg shadow-emerald-200">
+            <button id="btn-export" onclick="exportImage()" class="no-export bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg font-medium transition flex items-center shadow-lg shadow-emerald-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -331,32 +331,58 @@
             });
         }
 
-        // ฟังก์ชันส่งออกเป็นรูปภาพ
-        function exportImage() {
+        // ฟังก์ชันส่งออกเป็นรูปภาพ (ปรับปรุงใหม่เพื่อแก้ปัญหา Error)
+        async function exportImage() {
+            if (typeof html2canvas === 'undefined') {
+                alert('ไลบรารีกำลังโหลด กรุณารอสักครู่แล้วลองใหม่ครับ');
+                return;
+            }
+
             const area = document.getElementById('capture-area');
+            const btn = document.getElementById('btn-export');
             const productName = document.getElementById('productName').value || 'Pricing_Calculation';
             
-            // เพิ่ม class เพื่อซ่อนปุ่มและปรับแต่งชั่วคราวขณะถ่ายภาพ
-            document.body.classList.add('exporting');
+            // เปลี่ยนสถานะปุ่ม
+            btn.disabled = true;
+            btn.innerText = 'กำลังประมวลผล...';
             
-            html2canvas(area, {
-                scale: 2, // เพิ่มความชัดของภาพ
-                backgroundColor: "#f8fafc",
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
+            try {
+                // เคลียร์ scroll เพื่อลดปัญหาพิกัดเคลื่อน
+                window.scrollTo(0, 0);
+                
+                // เพิ่ม class เพื่อซ่อนปุ่ม
+                document.body.classList.add('exporting');
+                
+                // รอเล็กน้อยให้ UI อัปเดต
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                const canvas = await html2canvas(area, {
+                    scale: 2,
+                    backgroundColor: "#f8fafc",
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: true // เปิดไว้เพื่อเช็ก log ใน console
+                });
+
                 const link = document.createElement('a');
                 link.download = `${productName.replace(/\s+/g, '_')}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 
-                // นำ class ออกเมื่อเสร็จสิ้น
+            } catch (err) {
+                console.error('Html2Canvas Error:', err);
+                alert('ไม่สามารถบันทึกรูปภาพได้ในขณะนี้: ' + err.message);
+            } finally {
+                // คืนค่า UI
                 document.body.classList.remove('exporting');
-            }).catch(err => {
-                console.error('Error exporting image:', err);
-                document.body.classList.remove('exporting');
-                alert('เกิดข้อผิดพลาดในการบันทึกรูปภาพ');
-            });
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    บันทึกเป็นรูปภาพ
+                `;
+            }
         }
 
         window.onload = () => {
