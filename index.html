@@ -23,12 +23,13 @@
             margin: 0;
         }
         
+        /* สไตล์พิเศษสำหรับการส่งออกรูปภาพ */
         .exporting .no-export {
             display: none !important;
         }
         
         .exporting #capture-area {
-            width: 800px !important;
+            width: 800px !important; /* ล็อกความกว้างเพื่อให้รูปออกมาสัดส่วนสวยงาม */
             padding: 40px !important;
             background-color: white !important;
         }
@@ -40,18 +41,15 @@
         }
 
         .exporting .result-card {
-            order: -1 !important;
+            order: -1 !important; /* เอาสรุปราคาขึ้นไปไว้ด้านบนรองจากหัวข้อ */
             position: static !important;
             width: 100% !important;
-            background-color: #0f172a !important;
+            background-color: #0f172a !important; /* Slate 900 */
         }
 
-        .grid-label {
-            min-height: auto;
-            display: block;
-            font-weight: 600;
-            color: #475569;
-            margin-bottom: 0.25rem;
+        .exporting .grid-label {
+            min-height: auto !important;
+            margin-bottom: 4px !important;
         }
 
         @media (min-width: 768px) {
@@ -88,18 +86,18 @@
                 <section class="card p-6 border-l-8 border-slate-800">
                     <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                         รายละเอียดโปรเจกต์
                     </h2>
                     <div class="grid grid-cols-1 gap-4">
                         <div class="space-y-1">
-                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">ชื่อสินค้า / โปรเจกต์</label>
-                            <input type="text" id="productName" placeholder="ระบุชื่อโปรเจกต์..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-semibold text-slate-800 focus:ring-2 focus:ring-slate-400">
+                            <label class="text-xs font-bold text-slate-500 uppercase">ชื่อสินค้า / โปรเจกต์</label>
+                            <input type="text" id="productName" placeholder="ระบุชื่อโปรเจกต์..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-semibold text-slate-800">
                         </div>
                         <div class="space-y-1">
-                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">หมายเหตุเพิ่มเติม</label>
-                            <textarea id="productDetail" rows="2" placeholder="สเปกสินค้า หรือเงื่อนไขสำคัญ..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm focus:ring-2 focus:ring-slate-400"></textarea>
+                            <label class="text-xs font-bold text-slate-500 uppercase">หมายเหตุเพิ่มเติม</label>
+                            <textarea id="productDetail" rows="2" placeholder="สเปกสินค้า หรือเงื่อนไขสำคัญ..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm"></textarea>
                         </div>
                     </div>
                 </section>
@@ -108,17 +106,17 @@
                     <!-- Step 1: Costs -->
                     <section class="card p-6 border-t-4 border-blue-500">
                         <h3 class="font-bold mb-4 text-blue-700 flex items-center">
-                            <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center mr-2 text-sm">1</span>
+                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
                             โครงสร้างต้นทุน
                         </h3>
                         <div class="space-y-4">
                             <div>
                                 <label class="grid-label text-sm">ต้นทุนแปรผัน/ชิ้น</label>
-                                <input type="number" id="vCost" value="100" class="w-full p-3 bg-blue-50/30 border border-blue-100 rounded-xl outline-none font-bold text-blue-900 focus:ring-2 focus:ring-blue-300" oninput="calculate()">
+                                <input type="number" id="vCost" value="100" class="w-full p-3 bg-blue-50/30 border border-blue-100 rounded-xl outline-none font-bold text-blue-900" oninput="calculate()">
                             </div>
                             <div>
                                 <label class="grid-label text-sm">ต้นทุนคงที่ปันส่วน/ชิ้น</label>
-                                <input type="number" id="fCost" value="15" class="w-full p-3 bg-blue-50/30 border border-blue-100 rounded-xl outline-none font-bold text-blue-900 focus:ring-2 focus:ring-blue-300" oninput="calculate()">
+                                <input type="number" id="fCost" value="15" class="w-full p-3 bg-blue-50/30 border border-blue-100 rounded-xl outline-none font-bold text-blue-900" oninput="calculate()">
                             </div>
                         </div>
                     </section>
@@ -126,55 +124,35 @@
                     <!-- Step 2: Strategy -->
                     <section class="card p-6 border-t-4 border-green-500">
                         <h3 class="font-bold mb-4 text-green-700 flex items-center">
-                            <span class="w-8 h-8 bg-green-100 text-green-700 rounded-full flex items-center justify-center mr-2 text-sm">2</span>
-                            กลยุทธ์กำไร
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            กลยุทธ์การตั้งราคา
                         </h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="grid-label text-sm">รูปแบบการคิด</label>
+                                <label class="grid-label text-sm">รูปแบบ</label>
                                 <div class="grid grid-cols-2 gap-2 bg-slate-50 p-1 rounded-lg border border-slate-200">
                                     <label class="flex items-center justify-center cursor-pointer p-2 rounded-md has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-green-700">
                                         <input type="radio" name="strategy" value="markup" checked class="sr-only" onchange="calculate()">
-                                        <span class="text-xs font-bold uppercase">Markup</span>
+                                        <span class="text-xs font-bold">MARKUP</span>
                                     </label>
                                     <label class="flex items-center justify-center cursor-pointer p-2 rounded-md has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-green-700">
                                         <input type="radio" name="strategy" value="margin" class="sr-only" onchange="calculate()">
-                                        <span class="text-xs font-bold uppercase">Margin</span>
+                                        <span class="text-xs font-bold">MARGIN</span>
                                     </label>
                                 </div>
                             </div>
                             <div>
                                 <label class="grid-label text-sm">เป้าหมายกำไร (%)</label>
-                                <input type="number" id="profitTarget" value="30" class="w-full p-3 bg-green-50/30 border border-green-100 rounded-xl outline-none font-bold text-green-900 focus:ring-2 focus:ring-green-300" oninput="calculate()">
+                                <input type="number" id="profitTarget" value="30" class="w-full p-3 bg-green-50/30 border border-green-100 rounded-xl outline-none font-bold text-green-900" oninput="calculate()">
                             </div>
                         </div>
                     </section>
                 </div>
-
-                <!-- Step 3: B2B Negotiation (Primary Input) -->
-                <section class="card p-6 border-t-4 border-purple-500">
-                    <h3 class="font-bold mb-4 text-purple-700 flex items-center">
-                        <span class="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center mr-2 text-sm">3</span>
-                        เผื่อการต่อรอง B2B
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                        <div class="space-y-2">
-                            <label class="text-sm font-bold text-slate-600 block">เผื่อส่วนลดให้จัดซื้อ (%)</label>
-                            <input type="number" id="buffer" value="10" class="w-full p-4 bg-purple-50/50 border border-purple-200 rounded-2xl outline-none font-black text-2xl text-purple-900 focus:ring-4 focus:ring-purple-100" oninput="calculate()">
-                        </div>
-                        <div class="bg-purple-50 p-4 rounded-xl border border-dashed border-purple-200">
-                            <p class="text-xs text-purple-800 leading-relaxed italic">
-                                💡 แนะนำ: ใส่ตัวเลขที่ฝ่ายจัดซื้อมักจะต่อรอง (เช่น 10-15%) เพื่อให้ราคา Quoted มีที่ว่างพอให้เขาลดราคาได้โดยคุณไม่เสียกำไรเป้าหมาย
-                            </p>
-                        </div>
-                    </div>
-                </section>
             </div>
 
             <!-- Right Side: Summary Card -->
             <div class="lg:col-span-4 result-card">
-                <!-- Sticky only on Desktop (lg:sticky) -->
-                <div class="card bg-slate-900 text-white p-6 sm:p-8 lg:sticky lg:top-8 shadow-2xl overflow-hidden">
+                <div class="card bg-slate-900 text-white p-6 sm:p-8 sticky top-6 shadow-2xl">
                     <h2 class="text-lg font-bold mb-6 border-b border-white/10 pb-4 text-slate-400 flex justify-between">
                         สรุปราคาขาย
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -192,12 +170,10 @@
                             <span class="font-bold text-emerald-400" id="resNetPrice">0.00</span>
                         </div>
                         
-                        <div class="py-6 border-y border-white/10 text-center relative">
-                            <span class="text-blue-400 text-[10px] font-black uppercase tracking-widest block mb-2">ราคาเสนอขาย (QUOTED PRICE)</span>
-                            <div class="text-4xl sm:text-5xl font-black text-white tracking-tight" id="resQuotedPrice">0.00</div>
-                            <p class="text-[10px] text-slate-500 mt-2 font-medium italic">
-                                *รวมเผื่อส่วนลด <span id="resBufferText" class="font-bold">10</span>% แล้ว
-                            </p>
+                        <div class="py-6 border-y border-white/10 text-center">
+                            <span class="text-blue-400 text-[10px] font-black uppercase tracking-widest block mb-2">ราคาเสนอขายเบื้องต้น (Quoted)</span>
+                            <div class="text-4xl font-black text-white" id="resQuotedPrice">0.00</div>
+                            <p class="text-[10px] text-slate-500 mt-2 font-medium">*รวมเผื่อส่วนลดเจรจา <span id="resBufferText">10</span>% แล้ว</p>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
@@ -212,50 +188,54 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Buffer Input (Web Only) -->
+                <div class="no-export mt-4 p-4 bg-purple-50 rounded-xl border border-purple-100">
+                    <label class="text-xs font-bold text-purple-700 block mb-2 uppercase">เผื่อส่วนลดเจรจา (%)</label>
+                    <input type="number" id="buffer" value="10" class="w-full p-3 bg-white border border-purple-200 rounded-lg font-bold text-purple-900 outline-none focus:ring-2 focus:ring-purple-300" oninput="calculate()">
+                </div>
             </div>
         </div>
 
         <!-- Volume Discounts Table -->
         <section class="mt-8 card p-6 overflow-hidden">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-                <div>
-                    <h2 class="text-xl font-extrabold text-slate-800">วิเคราะห์ราคาขายตามปริมาณ (Volume)</h2>
-                    <p class="text-xs text-slate-400 mt-1 italic">ใช้สำหรับประเมินกำไรสุทธิเมื่อลูกค้าขอลดราคาล็อตใหญ่</p>
-                </div>
-                <button onclick="addRow()" class="no-export bg-slate-800 hover:bg-black text-white px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 class="text-xl font-bold text-slate-800">วิเคราะห์ราคาขายตามปริมาณ (Volume)</h2>
+                <button onclick="addRow()" class="no-export bg-slate-800 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
                     เพิ่มระดับจำนวน
                 </button>
             </div>
 
-            <div class="overflow-x-auto -mx-6 sm:mx-0">
-                <div class="inline-block min-w-full align-middle p-6 sm:p-0">
-                    <table class="min-w-full" id="pricing-table">
-                        <thead>
-                            <tr class="text-left border-b border-slate-100">
-                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider w-40">จำนวน (ชิ้น)</th>
-                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider w-24 text-center">ลด (%)</th>
-                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider text-right">ราคาต่อหน่วย</th>
-                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider text-right">กำไรสุทธิ</th>
-                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider text-right pr-4">MARGIN %</th>
-                                <th class="no-export"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tierTableBody" class="divide-y divide-slate-50">
-                            <!-- JS generated content -->
-                        </tbody>
-                    </table>
-                </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full" id="pricing-table">
+                    <thead>
+                        <tr class="text-left border-b border-slate-100">
+                            <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest w-40">จำนวน (ชิ้น)</th>
+                            <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest w-24 text-center">ลด (%)</th>
+                            <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">ราคาต่อหน่วย</th>
+                            <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">กำไรสุทธิ</th>
+                            <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right pr-4">MARGIN %</th>
+                            <th class="no-export"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tierTableBody" class="divide-y divide-slate-50">
+                        <!-- JS generated content -->
+                    </tbody>
+                </table>
             </div>
             
-            <footer class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] text-slate-400 italic">
-                <span>* ข้อมูลนี้ใช้สำหรับการวางแผนกลยุทธ์ภายในเท่านั้น ไม่ควรเปิดเผยต่อคู่ค้า</span>
-                <span class="no-export font-bold text-slate-300">B2B PRICING ENGINE 2.5</span>
+            <footer class="mt-6 pt-6 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 italic">
+                <span>* ข้อมูลนี้ใช้สำหรับการประเมินภายในเพื่อวางแผนกลยุทธ์การขายเท่านั้น</span>
+                <span class="no-export">B2B Pricing Engine v2.0</span>
             </footer>
         </section>
     </div>
 
     <script>
+        // Set Today's Date
         const updateDate = () => {
             const now = new Date();
             const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -297,21 +277,21 @@
                 const row = document.createElement('tr');
                 row.className = "hover:bg-slate-50/50 transition-colors";
                 row.innerHTML = `
-                    <td class="py-3 pr-2">
+                    <td class="py-3">
                         <input type="text" value="${tier.qty}" 
                             class="w-full p-2 bg-transparent border-b border-transparent focus:border-slate-400 outline-none text-sm font-bold"
                             oninput="updateTierValue(${index}, 'qty', this.value)">
                     </td>
                     <td class="py-3 text-center">
                         <input type="number" value="${tier.discount}" 
-                            class="w-16 p-2 bg-slate-50 border border-slate-100 rounded text-center text-sm font-black text-blue-600 outline-none focus:ring-2 focus:ring-blue-100"
+                            class="w-16 p-2 bg-slate-50 border border-slate-100 rounded text-center text-sm font-black text-blue-600 outline-none"
                             oninput="updateTierValue(${index}, 'discount', parseFloat(this.value) || 0)">
                     </td>
                     <td class="py-3 text-right text-sm font-bold text-slate-900" id="price-row-${index}">0.00</td>
                     <td class="py-3 text-right text-sm" id="profit-row-${index}">0.00</td>
                     <td class="py-3 text-right pr-4" id="margin-row-${index}">0.00%</td>
                     <td class="py-3 text-right no-export">
-                        <button onclick="removeRow(${index})" class="text-slate-300 hover:text-red-500 p-2 rounded-lg hover:bg-red-50 transition-colors">
+                        <button onclick="removeRow(${index})" class="text-slate-300 hover:text-red-500 p-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         </button>
                     </td>
@@ -377,13 +357,11 @@
             
             updateDate();
             btn.disabled = true;
-            btn.innerText = 'กำลังประมวลผล...';
+            btn.innerText = 'กำลังจัดรูปแบบรายงาน...';
             
             try {
                 window.scrollTo(0, 0);
                 document.body.classList.add('exporting');
-                
-                // รอให้ UI อัปเดตเล็กน้อย
                 await new Promise(r => setTimeout(r, 500));
 
                 const canvas = await html2canvas(area, {
@@ -391,28 +369,6 @@
                     backgroundColor: "#ffffff",
                     useCORS: true,
                     onclone: (clonedDoc) => {
-                        // แก้ปัญหา html2canvas ไม่จับค่าใน input/textarea
-                        const inputs = clonedDoc.querySelectorAll('input, textarea');
-                        inputs.forEach(input => {
-                            const parent = input.parentElement;
-                            const textNode = clonedDoc.createElement('span');
-                            
-                            // ดึงค่าจริงจากหน้าเว็บหลักมาใส่ใน span
-                            const realValue = document.getElementById(input.id)?.value || input.value;
-                            textNode.innerText = realValue;
-                            
-                            // จัดแต่ง span ให้ดูเหมือนข้อความปกติแต่รักษาความหนาไว้
-                            textNode.className = input.className;
-                            textNode.style.border = 'none';
-                            textNode.style.padding = '0.5rem';
-                            textNode.style.display = 'inline-block';
-                            textNode.style.background = 'transparent';
-                            
-                            // แทนที่ input ด้วย span เฉพาะตอนสร้างรูป
-                            parent.replaceChild(textNode, input);
-                        });
-
-                        // แก้ไขปัญหาสี oklch
                         const styleSheets = clonedDoc.styleSheets;
                         for (let i = 0; i < styleSheets.length; i++) {
                             try {
