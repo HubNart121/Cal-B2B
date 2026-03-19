@@ -392,47 +392,55 @@
                 await new Promise(r => setTimeout(r, 600));
 
                 const canvas = await html2canvas(area, {
-                    scale: 3, // เพิ่มความชัดมากขึ้น
+                    scale: 3, 
                     backgroundColor: "#ffffff",
                     useCORS: true,
                     logging: false,
                     onclone: (clonedDoc) => {
-                        // 1. จัดการข้อมูล Strategy ให้เป็นข้อความชัดเจน
+                        // 1. จัดการข้อมูล Strategy ให้เป็นข้อความชัดเจน และป้องกัน markup/margin โผล่ที่อื่น
                         const strategyContainer = clonedDoc.getElementById('strategy-container');
                         const activeStrategyInput = document.querySelector('input[name="strategy"]:checked');
                         if (strategyContainer && activeStrategyInput) {
                             const labelText = activeStrategyInput.parentElement.textContent.trim();
-                            strategyContainer.innerHTML = `<div class="w-full text-center p-2.5 bg-green-50 text-green-700 font-bold border-2 border-green-200 rounded-xl text-sm uppercase">ใช้รูปแบบ: ${labelText}</div>`;
+                            strategyContainer.innerHTML = `<div class="w-full text-center p-2.5 bg-green-50 text-green-700 font-bold border-2 border-green-200 rounded-xl text-sm uppercase">รูปแบบการคิด: ${labelText}</div>`;
                             strategyContainer.className = "flex w-full";
                         }
 
-                        // 2. แปลงทุก Input/Textarea ให้เป็น Text สุทธิ (แก้ปัญหาข้อมูลตกหล่น)
-                        // ดึงข้อมูลจาก DOM จริง ณ ตอนที่กดปุ่ม
+                        // 2. แปลงทุก Input/Textarea ให้เป็น Text สุทธิ
                         const originalArea = document.getElementById('capture-area');
-                        const originalInputs = originalArea.querySelectorAll('input, textarea');
                         const clonedInputs = clonedDoc.querySelectorAll('input, textarea');
                         
-                        clonedInputs.forEach((clonedInput, idx) => {
+                        clonedInputs.forEach((clonedInput) => {
+                            // ป้องกันการนำค่า Radio (markup/margin) มาแสดงเป็น Text
                             if (clonedInput.type === 'radio') return;
 
-                            const originalInput = originalInputs[idx];
+                            const originalInput = document.getElementById(clonedInput.id) || 
+                                                 Array.from(originalArea.querySelectorAll('input, textarea'))
+                                                 .find(inp => inp.id === clonedInput.id || (inp.name && inp.name === clonedInput.name));
+                            
                             const parent = clonedInput.parentElement;
                             const textDiv = clonedDoc.createElement('div');
                             
-                            // ดึงค่าจริงจาก originalInput
-                            textDiv.innerText = originalInput.value;
+                            // ดึงค่าจริง
+                            textDiv.innerText = originalInput ? originalInput.value : clonedInput.value;
                             
-                            // คัดลอกสไตล์สำคัญเพื่อรักษา Layout
+                            // จัดแต่งสไตล์
                             textDiv.className = clonedInput.className;
                             textDiv.style.border = 'none';
                             textDiv.style.backgroundColor = 'transparent';
                             textDiv.style.boxShadow = 'none';
                             textDiv.style.display = 'flex';
                             textDiv.style.alignItems = 'center';
-                            textDiv.style.justifyContent = window.getComputedStyle(originalInput).justifyContent;
-                            textDiv.style.paddingLeft = window.getComputedStyle(originalInput).paddingLeft;
-                            textDiv.style.paddingRight = window.getComputedStyle(originalInput).paddingRight;
-                            textDiv.style.minHeight = window.getComputedStyle(originalInput).height;
+                            
+                            // แก้ไขปัญหาการจัดตำแหน่งตัวเลขในตารางส่วนลดให้ตรงกลาง
+                            if (clonedInput.id && clonedInput.id.includes('tier-discount')) {
+                                textDiv.style.justifyContent = 'center';
+                                textDiv.style.textAlign = 'center';
+                            } else {
+                                textDiv.style.paddingLeft = '0.75rem';
+                            }
+                            
+                            textDiv.style.minHeight = '2.5rem';
                             
                             parent.replaceChild(textDiv, clonedInput);
                         });
