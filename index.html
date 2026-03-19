@@ -233,11 +233,11 @@
                     <table class="min-w-full" id="pricing-table">
                         <thead>
                             <tr class="text-left border-b border-slate-100">
-                                <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest w-40">จำนวน (ชิ้น)</th>
-                                <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest w-24 text-center">ลด (%)</th>
-                                <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">ราคาต่อหน่วย</th>
-                                <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">กำไรสุทธิ</th>
-                                <th class="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right pr-4">MARGIN %</th>
+                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider w-40">จำนวน (ชิ้น)</th>
+                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider w-24 text-center">ลด (%)</th>
+                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider text-right">ราคาต่อหน่วย</th>
+                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider text-right">กำไรสุทธิ</th>
+                                <th class="pb-3 text-sm font-bold text-slate-600 uppercase tracking-wider text-right pr-4">MARGIN %</th>
                                 <th class="no-export"></th>
                             </tr>
                         </thead>
@@ -382,6 +382,8 @@
             try {
                 window.scrollTo(0, 0);
                 document.body.classList.add('exporting');
+                
+                // รอให้ UI อัปเดตเล็กน้อย
                 await new Promise(r => setTimeout(r, 500));
 
                 const canvas = await html2canvas(area, {
@@ -389,6 +391,28 @@
                     backgroundColor: "#ffffff",
                     useCORS: true,
                     onclone: (clonedDoc) => {
+                        // แก้ปัญหา html2canvas ไม่จับค่าใน input/textarea
+                        const inputs = clonedDoc.querySelectorAll('input, textarea');
+                        inputs.forEach(input => {
+                            const parent = input.parentElement;
+                            const textNode = clonedDoc.createElement('span');
+                            
+                            // ดึงค่าจริงจากหน้าเว็บหลักมาใส่ใน span
+                            const realValue = document.getElementById(input.id)?.value || input.value;
+                            textNode.innerText = realValue;
+                            
+                            // จัดแต่ง span ให้ดูเหมือนข้อความปกติแต่รักษาความหนาไว้
+                            textNode.className = input.className;
+                            textNode.style.border = 'none';
+                            textNode.style.padding = '0.5rem';
+                            textNode.style.display = 'inline-block';
+                            textNode.style.background = 'transparent';
+                            
+                            // แทนที่ input ด้วย span เฉพาะตอนสร้างรูป
+                            parent.replaceChild(textNode, input);
+                        });
+
+                        // แก้ไขปัญหาสี oklch
                         const styleSheets = clonedDoc.styleSheets;
                         for (let i = 0; i < styleSheets.length; i++) {
                             try {
